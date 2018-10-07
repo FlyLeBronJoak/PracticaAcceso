@@ -27,78 +27,29 @@ public class Ventana extends javax.swing.JFrame {
         initComponents();  
     }
     
-
-    
-    private void escrito() {
-        //texto q va dentro del xml
-        String texto = jTextArea1.getText();
-        //nombre del xml
-        String nombre = "Proyecto\\libros.xml";
+        private void bufferedwriter(String escrito, String rutaArchivo){
         try {
-            //creamos un objeto tipo fileWriter
-            FileWriter fichero = new FileWriter(nombre);
-            //introducimos la info
-            fichero.write(texto + "\r\n");
-            //cerramos el fileWriter
-            fichero.close();
-        } catch (IOException ex) {
-            System.out.println("Erroraco");
-        }
-    }
-
-    private void leer(String rutaArchivo) {
-        
-        String nombre = "libros.xml";
-        
-        try {
-            
-            //creamos el objeto fileReader
-            FileReader fr = new FileReader(rutaArchivo);
-            
-            //leemos el fichero y lo mostramos
-            int valor = fr.read();
-            while (valor != -1) {
-//                System.out.print((char) valor);
-                bufferedreader(rutaArchivo);
-                valor = fr.read();
-            }
-            
-            //se cierra el fileReader
-            fr.close();
-        } catch (Exception e) {
-            System.out.println("fail");
-        }
-    }
-    
-    private void bufferedwriter(String escrito, String rutaArchivo){
-        try {
+            //creamos un buffered writer y le indicamos donde lo guardara
             BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo));
+            //le indicamos q ha de escribir
+            bw.write(escrito); //escrito hace referencia al jTextArea1.getText() del boton de guardado    
+            //cerramos el buffered writer
+            bw.close();
             
-            bw.write(escrito);
-                
-                         
-//            
-//            for (int i=0; i< texto.length(); i++){
-//                
-//                if (texto.charAt(i) == '<'){
-//                    
-//                    while(texto.charAt(i) != '>'){
-//                        bw.write(texto.charAt(i));
-//                        
-//                        i++;
-//                    }
-//                    
-//                    bw.write(texto.charAt(i));
-//                    bw.newLine();
-//                }
-//                else{
-//                    bw.write(texto.charAt(i));
-//                    if(texto.charAt(i + 1) == '<'){
-//                        bw.newLine();
-//                    }
-//                    
-//                }
-//            }
+        } catch (Exception e) {        
+            System.out.println("fail");       
+        }
+    }
+    
+    private void bufferedwriter2(String escrito, String rutaArchivo){
+        try {
+            //creamos un buffered writer y le indicamos donde lo guardara
+            BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo,true));
+            //le indicamos q cree una linea antes de nada pues este va al boton de modificar
+            bw.newLine();
+            //le indicamos q ha de escribir
+            bw.write(escrito);//escrito hace referencia al jTextArea1.getText() del boton de guardado
+            //cerramos el buffered writer
             bw.close();
             
         } catch (Exception e) {        
@@ -107,16 +58,15 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     private void  bufferedreader(String rutaArchivo) throws FileNotFoundException{
-        BufferedReader br = new BufferedReader(new FileReader(rutaArchivo));
-               
         try{
-       
-        while ( br.readLine() != null) {
-            
-            jTextArea1.read(br, br);
-            
-        }
-        }catch(IOException e){
+            //creamos el buffered reader y le indicamos el archivo q va a leer
+            BufferedReader br = new BufferedReader(new FileReader(rutaArchivo));
+            //indicamos donde queremos q escriba el archivo q ha leido
+            jTextArea1.read(br,br);
+            //cerramos el buffered reader
+            br.close();
+        
+        } catch(IOException e){
             System.out.println("fallo");
         }
             
@@ -133,35 +83,44 @@ public class Ventana extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        abrir = new javax.swing.JButton();
+        guardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        modificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setText("abrir");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        abrir.setText("abrir");
+        abrir.setMaximumSize(new java.awt.Dimension(71, 23));
+        abrir.setMinimumSize(new java.awt.Dimension(71, 23));
+        abrir.setPreferredSize(new java.awt.Dimension(71, 23));
+        abrir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                abrirMouseClicked(evt);
             }
         });
 
-        jButton3.setText("guardar");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        guardar.setText("guardar");
+        guardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
-            }
-        });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                guardarMouseClicked(evt);
             }
         });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+
+        modificar.setText("modificar");
+        modificar.setMaximumSize(new java.awt.Dimension(71, 23));
+        modificar.setMinimumSize(new java.awt.Dimension(71, 23));
+        modificar.setPreferredSize(new java.awt.Dimension(71, 23));
+        modificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                modificarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -171,9 +130,11 @@ public class Ventana extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addComponent(abrir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -181,13 +142,17 @@ public class Ventana extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(modificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(abrir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        modificar.getAccessibleContext().setAccessibleName("modificar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,57 +173,60 @@ public class Ventana extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void abrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_abrirMouseClicked
         
-        
+        //creamos el JFileChooser
         JFileChooser jF1= new JFileChooser(); 
 
     try{ 
         if(jF1.showOpenDialog(null)==jF1.APPROVE_OPTION){ 
+            
+            // le indicamos donde buscar
             String rutaArchivo = jF1.getSelectedFile().getAbsolutePath(); 
-            //Aqui ya tiens la ruta,,,ahora puedes crear un fichero n esa ruta y escribir lo k kieras... 
+            //le pasamos al buffered reader q queremos q lea 
             bufferedreader(rutaArchivo);
-            
-           
-            
         } 
     }catch (Exception ex){ 
-        
-        ex.printStackTrace(); 
+        System.out.println("algo has roto"); 
     } 
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_abrirMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void guardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarMouseClicked
+        //creo el JFileChooser
         JFileChooser jF1= new JFileChooser(); 
+    try{ 
+        //si das al boton de guardar
+        if(jF1.showSaveDialog(null)==jF1.APPROVE_OPTION){ 
+            //le indicamos donde queremos guardar el archivo
+            String rutaArchivo = jF1.getSelectedFile().getAbsolutePath(); 
+            // 
+            //le pasamos al buffered writer q queremos q escriba y donde
+            bufferedwriter(jTextArea1.getText(),rutaArchivo);     
+        } 
+        //si se lia 
+    }catch (Exception ex){ 
+        System.out.println("algo has roto");
+    } 
+    }//GEN-LAST:event_guardarMouseClicked
+
+    private void modificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarMouseClicked
+        
+         JFileChooser jF1= new JFileChooser(); 
 
     try{ 
         if(jF1.showSaveDialog(null)==jF1.APPROVE_OPTION){ 
             String rutaArchivo = jF1.getSelectedFile().getAbsolutePath(); 
             //Aqui ya tiens la ruta,,,ahora puedes crear un fichero n esa ruta y escribir lo k kieras... 
             
-            bufferedwriter(jTextArea1.getText(),rutaArchivo);
+            bufferedwriter2(jTextArea1.getText(), rutaArchivo);
             
         } 
     }catch (Exception ex){ 
         ex.printStackTrace(); 
     } 
-    }//GEN-LAST:event_jButton3MouseClicked
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-
-       
-         
-         
-//         jf = new jfilechooser;
-//
-//         jf.setDialogTYpe (savedialog);
-//         
-//         showdialog
-//         
-//                 jf.respuesta
-//           file=    jf.  getselectfile
-    }//GEN-LAST:event_jButton3ActionPerformed
+    
+        
+    }//GEN-LAST:event_modificarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -314,10 +282,11 @@ public class Ventana extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton abrir;
+    private javax.swing.JButton guardar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton modificar;
     // End of variables declaration//GEN-END:variables
 }
